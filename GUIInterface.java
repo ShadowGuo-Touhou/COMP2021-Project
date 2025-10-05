@@ -1,11 +1,10 @@
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Stack;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import java.lang.Math;
 
 
 
@@ -24,7 +22,8 @@ public class GUIInterface {
     private static final JButton enterButton = new JButton("OK");
     private static final JButton redoButton = new JButton("←");
     private static final JButton undoButton = new JButton("→");
-
+    private static final JButton zoomInButton = new JButton("+");
+    private static final JButton zoomOutButton = new JButton("-");
     private static final JTextArea inputTextArea = new JTextArea(2,TEXTWIDTH);
     private static final JTextArea outputTextArea = new JTextArea(5,TEXTWIDTH);
 
@@ -87,21 +86,23 @@ public class GUIInterface {
         //=============================================================================================\\
         layoutManager.gridx = 0;layoutManager.gridy = 3;
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(zoomOutButton);
         buttonPanel.add(redoButton);
         buttonPanel.add(enterButton);
         buttonPanel.add(undoButton);
+        buttonPanel.add(zoomInButton);
         mainDisplayFrame.add(buttonPanel,layoutManager);
         //=============================================================================================\\
-        enterButton.addActionListener(new ActionListener(){
-            //set up button action
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        enterButton.addActionListener((e)->{
                 String getText = inputTextArea.getText();
                 if (getText.equals(""))return;
                 outputTextArea.append(StripLineFeed(getText)+"\n");
                 inputTextArea.selectAll();
                 inputTextArea.replaceSelection("");
-            }});
+            });
+
+        zoomInButton.addActionListener((e)->myCanvass.zoomIn());
+        zoomOutButton.addActionListener((e)->myCanvass.zoomOut());
             // //Set up key binding
             // JPanel contentPane = (JPanel) mainDisplayFrame.getContentPane();
             // int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
@@ -120,6 +121,8 @@ public class GUIInterface {
             //         inputTextArea.replaceSelection("");
             //     }
             // });
+        //=============================================================================================\\
+        
         
         //=============================================================================================\\
         mainDisplayFrame.pack(); //Resize window so it incorporate all component
@@ -142,14 +145,34 @@ public class GUIInterface {
  */
 class Canvass extends JPanel {
     private Stack<SHAPE> shapeToDrawStack = new Stack<>();
-    private int halfWidth = 250;
-    private int halfHeight = 250;
+    private int CenterX = 250;
+    private int CenterY = 250;
     private int zoomRate = 1;
     /*
      * Initialize the canvass
      */
     public Canvass(){
         setBorder(BorderFactory.createLineBorder(Color.black));
+        //Create buttons
+        JButton ShiftUpButton = new JButton("↑");
+        ShiftUpButton.setPreferredSize(new Dimension(20,10));
+        JButton ShiftDownButton = new JButton("↓");
+        ShiftDownButton.setPreferredSize(new Dimension(20,10));
+        JButton ShiftLeftButton = new JButton("←");
+        ShiftLeftButton.setPreferredSize(new Dimension(10,20));
+        JButton ShiftRightButton = new JButton("→");
+        ShiftRightButton.setPreferredSize(new Dimension(10,20));
+        //add buttons to canvas
+        setLayout(new BorderLayout());
+        add(ShiftUpButton,BorderLayout.NORTH);
+        add(ShiftDownButton, BorderLayout.SOUTH);
+        add(ShiftLeftButton, BorderLayout.WEST);
+        add(ShiftRightButton, BorderLayout.EAST);
+        
+        ShiftUpButton.addActionListener(e->shiftUp());
+        ShiftDownButton.addActionListener(e->shiftDown());
+        ShiftLeftButton.addActionListener(e->shiftLeft());
+        ShiftRightButton.addActionListener(e->shiftRight());
     }
     /*
      * Return the size for the pack() in main display GUI
@@ -165,27 +188,29 @@ class Canvass extends JPanel {
     public void paintComponent(Graphics shape){
         super.paintComponent(shape);
         //draw coordinate system    
-        shape.drawLine(0,250,500,250);
-        shape.drawLine(250,0,250,500);
-        shape.drawString("Shit", 20, 20);
+        shape.drawLine(0,CenterY,500,CenterY);
+        shape.drawLine(CenterX,0,CenterX,500);
+        Stack<SHAPE> shapeToDrawStack2 = new Stack<>();
+
         while (!(shapeToDrawStack.isEmpty())){
             SHAPE shapeToDraw = shapeToDrawStack.pop();
+            shapeToDrawStack2.push(shapeToDraw);
             if (shapeToDraw instanceof Rectangle s) {
                 int[] fit = fitToWindow((int)Math.round(s.X()), (int)Math.round(s.Y()));
-                shape.drawRect(fit[0], fit[1], (int)Math.round(s.W()), (int)Math.round(s.H()));
+                shape.drawRect(fit[0], fit[1], zoomRate*(int)Math.round(s.W()), zoomRate*(int)Math.round(s.H()));
             } else if (shapeToDraw instanceof Line s) {
                 int[] fit1 = fitToWindow((int)Math.round(s.X1()), (int)Math.round(s.Y1()));
                 int[] fit2 = fitToWindow((int)Math.round(s.X2()), (int)Math.round(s.Y2()));
                 shape.drawLine(fit1[0], fit1[1], fit2[0], fit2[1]);
             } else if (shapeToDraw instanceof Circle s) {
                 int [] fit = fitToWindow((int)Math.round(s.X()), (int)Math.round(s.Y()));
-                shape.drawOval(fit[0], fit[1], (int)Math.round(s.R())*2, (int)Math.round(s.R())*2);
+                shape.drawOval(fit[0], fit[1], zoomRate*(int)Math.round(s.R())*2, zoomRate*(int)Math.round(s.R())*2);
             } else if (shapeToDraw instanceof Square s) {
                 int [] fit = fitToWindow((int)Math.round(s.X()), (int)Math.round(s.Y()));
-                shape.drawRect(fit[0], fit[1], (int)Math.round(s.L()), (int)Math.round(s.L()));
+                shape.drawRect(fit[0], fit[1], zoomRate*(int)Math.round(s.L()), zoomRate*(int)Math.round(s.L()));
             }
         }
-        
+        shapeToDrawStack = shapeToDrawStack2;
     }
     /*
      * invoke repainting the canvass
@@ -198,10 +223,36 @@ class Canvass extends JPanel {
      */
     public void drawShape(SHAPE shape){
         this.shapeToDrawStack.push(shape);
+        updateCanvas();
     }
-    public int[] fitToWindow(int x, int y){
-        int[] fit = {x*zoomRate+halfWidth,halfHeight-y*zoomRate};
+    private int[] fitToWindow(int x, int y){
+        int[] fit = {zoomRate*x+CenterX,CenterY-zoomRate*y};
         return fit;
+    }
+    protected void shiftLeft(){
+        this.CenterX+=30;
+        updateCanvas();
+    }
+    protected void shiftRight(){
+        this.CenterX-=30;
+        updateCanvas();
+    }
+    protected void shiftUp(){
+        this.CenterY+=30;
+        updateCanvas();
+    }
+    protected void shiftDown(){
+        this.CenterY-=30;
+        updateCanvas();
+    }
+    protected void zoomIn(){
+        zoomRate+=1;
+        updateCanvas();
+    }
+    protected void zoomOut(){
+        if(zoomRate<=1)return;
+        zoomRate-=1;
+        updateCanvas();
     }
 
 }
