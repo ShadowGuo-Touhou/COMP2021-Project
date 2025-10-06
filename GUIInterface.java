@@ -5,49 +5,48 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.Stack;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-
-
 public class GUIInterface {
-    private static final int TEXTWIDTH = 30;
-    private static final Canvass myCanvass = new Canvass();
-    private static final JButton enterButton = new JButton("OK");
-    private static final JButton redoButton = new JButton("←");
-    private static final JButton undoButton = new JButton("→");
-    private static final JButton zoomInButton = new JButton("+");
-    private static final JButton zoomOutButton = new JButton("-");
-    private static final JTextArea inputTextArea = new JTextArea(2,TEXTWIDTH);
-    private static final JTextArea outputTextArea = new JTextArea(5,TEXTWIDTH);
-
-
-    public static void main(String[] args) {
-        Initialize();
-        myCanvass.drawShape(new Rectangle("2",0,0,10,10,1));
-        myCanvass.drawShape(new Circle("1", -50, 50, 25, 0));
-        myCanvass.repaint();
-    }
+    private final int TEXTWIDTH = 30;
+    private final Canvass myCanvass = new Canvass();
+    private final JButton enterButton = new JButton("OK");
+    private final JButton redoButton = new JButton("←");
+    private final JButton undoButton = new JButton("→");
+    private final JButton zoomInButton = new JButton("+");
+    private final JButton zoomOutButton = new JButton("-");
+    private final JTextArea inputTextArea = new JTextArea(2,TEXTWIDTH);
+    private final JTextArea outputTextArea = new JTextArea(5,TEXTWIDTH);
+    private String userInputString = "";
+    private final JFrame mainDisplayFrame = new JFrame("Cirno's Graphic Displayer");
 
     /*
      * Initialize the Jframe panel
      */
-    private  static void Initialize(){
+    public GUIInterface(){
         SwingUtilities.invokeLater(()->CreateMainDisplayFrame());
 
     }
     /*
      * Initialize the main dispaly GUI, this is where the main panel is created and components of which are added. 
      */
-    private static void CreateMainDisplayFrame(){
-        System.out.println("On EDT = "+ SwingUtilities.isEventDispatchThread()); //Debug Info
-        JFrame mainDisplayFrame = new JFrame("I am a GUI"); //Title
+    private void CreateMainDisplayFrame(){
+        // System.out.println("On EDT = "+ SwingUtilities.isEventDispatchThread()); //Debug Info
         mainDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit on close
         // mainDisplayFrame.setResizable(false); //Set if the window is resizable
         //============================================================================================\\
@@ -57,6 +56,10 @@ public class GUIInterface {
         layoutManager.fill = GridBagConstraints.HORIZONTAL;
         mainDisplayFrame.add(myCanvass, layoutManager); //Add canvas to panel
 
+        //=============================================================================================\\
+        //Change Icon
+        ImageIcon imgIcon = new ImageIcon(getClass().getResource("/cirno.png"));
+        mainDisplayFrame.setIconImage(imgIcon.getImage());
         //=============================================================================================\\
         //Jtextarea Reference: https://docs.oracle.com/javase/8/docs/api/javax/swing/JTextArea.html
         //Jscrollable Referece: https://stackoverflow.com/questions/8849063/adding-a-scrollable-jtextarea-java
@@ -73,6 +76,7 @@ public class GUIInterface {
         JScrollPane outputTextAreaScrollPane = new JScrollPane(outputTextArea);
         outputTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         mainDisplayFrame.add(outputTextAreaScrollPane, layoutManager);
+        outputTextArea.append("Use CTRL+arrow keys to adjust position\nUse CTRL+ PLUS/MINUS to zoom in/out\n(´▽`ʃ♡ƪ)\n");
 
         layoutManager.gridheight = 1;
         layoutManager.fill = GridBagConstraints.HORIZONTAL;
@@ -84,58 +88,130 @@ public class GUIInterface {
         inputTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         mainDisplayFrame.add(inputTextAreaScrollPane, layoutManager);
         //=============================================================================================\\
+        //Buttons
         layoutManager.gridx = 0;layoutManager.gridy = 3;
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(zoomOutButton);
-        buttonPanel.add(redoButton);
+        // buttonPanel.add(zoomOutButton);
+        // buttonPanel.add(redoButton);
         buttonPanel.add(enterButton);
-        buttonPanel.add(undoButton);
-        buttonPanel.add(zoomInButton);
+        // buttonPanel.add(undoButton);
+        // buttonPanel.add(zoomInButton);
         mainDisplayFrame.add(buttonPanel,layoutManager);
         //=============================================================================================\\
-        enterButton.addActionListener((e)->{
-                String getText = inputTextArea.getText();
-                if (getText.equals(""))return;
-                outputTextArea.append(StripLineFeed(getText)+"\n");
-                inputTextArea.selectAll();
-                inputTextArea.replaceSelection("");
-            });
-
-        zoomInButton.addActionListener((e)->myCanvass.zoomIn());
-        zoomOutButton.addActionListener((e)->myCanvass.zoomOut());
-            // //Set up key binding
-            // JPanel contentPane = (JPanel) mainDisplayFrame.getContentPane();
-            // int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
-            // InputMap inputMap = contentPane.getInputMap(condition);
-            // ActionMap actionMap = contentPane.getActionMap();
-
-            // String enter = "Enter";
-            // inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), enter);
-            // actionMap.put(enter, new AbstractAction() {
-            //     @Override
-            //     public void actionPerformed(ActionEvent key){
-            //         String getText = inputTextArea.getText();
-            //         if (getText.equals(""))return;
-            //         outputTextArea.append(getText+"\n");
-            //         inputTextArea.selectAll();
-            //         inputTextArea.replaceSelection("");
-            //     }
-            // });
-        //=============================================================================================\\
-        
-        
+        ButtonFunctions();
         //=============================================================================================\\
         mainDisplayFrame.pack(); //Resize window so it incorporate all component
         mainDisplayFrame.setLocationRelativeTo(null);
         mainDisplayFrame.setVisible(true); //show up
     }
-    
-    private static String StripLineFeed(String inputString){
-        int start = 0;
-        int end = inputString.length();
-        while(inputString.charAt(start)=='\n') start++;
-        while(inputString.charAt(end-1)=='\n') end--;
-        return inputString.substring(start,end);
+//=====================================================================================================\\
+    private void ButtonFunctions(){
+        enterButton.addActionListener((e)->TextUpDate());
+        zoomInButton.addActionListener((e)->myCanvass.zoomIn());
+        zoomOutButton.addActionListener((e)->myCanvass.zoomOut());
+    //Set up key binding============================================================
+        int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        InputMap inputMap = mainDisplayFrame.getRootPane().getInputMap(condition);
+        ActionMap actionMap = mainDisplayFrame.getRootPane().getActionMap();
+    //UP Key Binding================================================================
+        final String MOVEUP = "MoveUp";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,KeyEvent.CTRL_DOWN_MASK), MOVEUP);
+        actionMap.put(MOVEUP, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftUp();
+            }});
+    //DOWN Key Binding==============================================================
+        final String MOVEDOWN = "MoveDown";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,KeyEvent.CTRL_DOWN_MASK), MOVEDOWN);
+        actionMap.put(MOVEDOWN, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftDown();
+            }});    
+    //LEFT Key Binding==============================================================
+        final String MOVELEFT = "MoveLeft";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
+        actionMap.put(MOVELEFT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftLeft();
+            }});    
+        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
+        inputTextArea.getActionMap().put(MOVELEFT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftLeft();
+            }});
+    //RIGHT Key Binding==============================================================
+        final String MOVERIGHT = "MoveRIGHT";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
+        actionMap.put(MOVERIGHT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftRight();
+            }});    
+        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
+        inputTextArea.getActionMap().put(MOVERIGHT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftRight();
+            }});
+    //ENTER Key Binding==============================================================
+        final String ENTER = "ENTER";
+        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), ENTER);
+        inputTextArea.getActionMap().put(ENTER, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                TextUpDate();
+            }});
+    //PLUS Key Binding==============================================================
+        final String PLUS = "PLUS";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK), PLUS);
+        actionMap.put(PLUS, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.zoomIn();
+            }});   
+    //MINUS Key Binding==============================================================
+        final String MINUS = "MINUS";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK), MINUS);
+        actionMap.put(MINUS, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.zoomOut();
+            }});    
+    }
+
+//==================================Handle Enter button===============================================\\
+    /*
+     * 将输入栏清空，并保存用户输入结果后写入输出栏，
+     */
+    private void TextUpDate(){
+        String getText = inputTextArea.getText();
+        this.userInputString = getText;
+        outputTextArea.append(getText+"\n");
+        if (getText.equals("")) return;
+        inputTextArea.selectAll();
+        inputTextArea.replaceSelection("");
+    }
+    /*
+     * 这个方法可以获取用户输入，返回String
+     */
+    public String getUserInput(){return this.userInputString;}
+    /*
+     * 写入输出栏
+     * @param s 输出
+     */
+    public void updateOutput(String s){
+        SwingUtilities.invokeLater(()->outputTextArea.append(s+"\n"));
+    }
+//===================================Draw shape=====================================================\\
+    /*
+     * 这个方法是用来绘制图形的，建议直接传入包含所有图形的数组，无需去掉Group类
+     */
+    public void DrawShape(SHAPE[] shape){
+        SwingUtilities.invokeLater(()->this.myCanvass.drawShape(shape));
     }
 }
 
@@ -151,9 +227,13 @@ class Canvass extends JPanel {
     /*
      * Initialize the canvass
      */
-    public Canvass(){
+    Canvass(){
         setBorder(BorderFactory.createLineBorder(Color.black));
         //Create buttons
+        // setUpButtonFunction();
+    }
+
+    private void setUpButtonFunction(){
         JButton ShiftUpButton = new JButton("↑");
         ShiftUpButton.setPreferredSize(new Dimension(20,10));
         JButton ShiftDownButton = new JButton("↓");
@@ -208,7 +288,22 @@ class Canvass extends JPanel {
             } else if (shapeToDraw instanceof Square s) {
                 int [] fit = fitToWindow((int)Math.round(s.X()), (int)Math.round(s.Y()));
                 shape.drawRect(fit[0], fit[1], zoomRate*(int)Math.round(s.L()), zoomRate*(int)Math.round(s.L()));
-            }
+            } else if (shapeToDraw instanceof Group g){
+    // 　　　　　　　＿人人人人人人人人人人人人人＿_                            ,,....,, _
+    // 　　　　　　　＞　　ゆっくりしていってね！！！＜             ／::::::::::::::::: " ' :; ,,,
+    // 　　　　　　　￣^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^Ｙ^   ／::::::::::::::::::::::::/"     ,,,
+    // 　　　＿_＿　　　 _____　 ______.　　　　　r‐- .,_／::::::::::::; ／￣ヽ;:::::::|
+    // 　　 ネ　　_,, '-´￣￣｀-ゝ、_''　　　　__.)　　　`''ｧ-ｧ'"´, '　　　 ヽ:::|
+    // 　　, ﾝ 'r ´　　　　　　　　　　ヽ、　　ゝ_, '"ソ二ﾊ二`ゝ- ﾍ ､_　_ ゞ!._
+    // 　 i　,' ＝=─-　　　 　 -─=＝ ;　､'"ヽ, '´　,' 　; 　　`"''‐-=ﾌﾞ､_,:::::"'''- ,,
+    // 　 |　i　ｲ ルゝ､ｲ;人レ／ﾙヽｲ　 i　ヽ_/i.　 /!　ﾊ 　ﾊ　 ! ヽ　ヽ 丶'ァ' '"
+    // 　 ||. i、|. |　(ﾋ_]　　　　ﾋ_ﾝ) i ﾘｲj　　 <、 ',. /__,.!/ V　､!__,ﾊ､ |｀、｀; ,!i;
+    // 　 |　iヽ「 ! ""　　,＿__,　 "" !Y.!　　　ヽ iV (ﾋ_] 　　　ﾋ_ﾝ )　ﾚ !;　 ｲ ）
+    // 　 .| |ヽ.L.」　　　 ヽ _ﾝ　　　,'._.」　　　　V i '"　 ,＿__,　　 "' '!　ヽ　 （
+    // 　 ヽ |ｲ|| |ヽ､　　　　　　　 ｲ|| |　　　　 i,.人.　　ヽ _ｿ　　　 ,.ﾊ　 ）　､ `､
+    // 　 　ﾚ　ﾚル.　｀.ー--一 ´ル レ　　　　ﾉハ　> ,､ ._____,. ,,. ｲ;（　 （ '` .)　）
+    //  写烦了，整点行为艺术，这BGUI谁爱写谁写
+}
         }
         shapeToDrawStack = shapeToDrawStack2;
     }
@@ -221,8 +316,9 @@ class Canvass extends JPanel {
     /*
      * append the shape to redraw to the stack
      */
-    public void drawShape(SHAPE shape){
-        this.shapeToDrawStack.push(shape);
+    protected void drawShape(SHAPE[] shape){
+        this.shapeToDrawStack.clear();
+        for(SHAPE s: shape) if(s!=null) this.shapeToDrawStack.push(s);
         updateCanvas();
     }
     private int[] fitToWindow(int x, int y){
@@ -250,9 +346,8 @@ class Canvass extends JPanel {
         updateCanvas();
     }
     protected void zoomOut(){
-        if(zoomRate<=1)return;
+        if(zoomRate==1)return;
         zoomRate-=1;
         updateCanvas();
     }
-
 }
