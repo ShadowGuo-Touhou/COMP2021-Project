@@ -36,7 +36,7 @@ public class GUIInterface {
     private final JButton zoomInButton = new JButton("+");
     private final JButton zoomOutButton = new JButton("-");
     private final JTextArea inputTextArea = new JTextArea(2,TEXTWIDTH);
-    private final JTextArea outputTextArea = new JTextArea(5,TEXTWIDTH);
+    private final JTextArea outputTextArea = new JTextArea(8,TEXTWIDTH);
     private String userInputString = "";
     private final JFrame mainDisplayFrame = new JFrame("Cirno's Graphic Displayer");
 
@@ -93,23 +93,24 @@ public class GUIInterface {
         inputTextArea.setLineWrap(true);
         JScrollPane inputTextAreaScrollPane = new JScrollPane(inputTextArea);
         inputTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        mainDisplayFrame.add(inputTextAreaScrollPane, layoutManager);
+//        mainDisplayFrame.add(inputTextAreaScrollPane, layoutManager);
         //=============================================================================================\\
         //Buttons
-        layoutManager.gridx = 0;layoutManager.gridy = 3;
-        JPanel buttonPanel = new JPanel();
+//        layoutManager.gridx = 0;layoutManager.gridy = 3;
+//        JPanel buttonPanel = new JPanel();
         // buttonPanel.add(zoomOutButton);
         // buttonPanel.add(redoButton);
-        buttonPanel.add(enterButton);
+//        buttonPanel.add(enterButton);
         // buttonPanel.add(undoButton);
         // buttonPanel.add(zoomInButton);
-        mainDisplayFrame.add(buttonPanel,layoutManager);
+//        mainDisplayFrame.add(buttonPanel,layoutManager);
         //=============================================================================================\\
         ButtonFunctions();
         //=============================================================================================\\
         mainDisplayFrame.pack(); //Resize window so it incorporate all component
         mainDisplayFrame.setLocationRelativeTo(null);
         mainDisplayFrame.setVisible(true); //show up
+        mainDisplayFrame.setAlwaysOnTop(true);
     }
 //=====================================================================================================\\
     private void ButtonFunctions(){
@@ -117,9 +118,37 @@ public class GUIInterface {
         zoomInButton.addActionListener((e)->myCanvass.zoomIn());
         zoomOutButton.addActionListener((e)->myCanvass.zoomOut());
     //Set up key binding============================================================
-        int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        int condition = JComponent.WHEN_FOCUSED;
         InputMap inputMap = mainDisplayFrame.getRootPane().getInputMap(condition);
         ActionMap actionMap = mainDisplayFrame.getRootPane().getActionMap();
+    //LEFT Key Binding==============================================================
+        final String MOVELEFT = "MoveLeft";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
+        actionMap.put(MOVELEFT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftLeft();
+            }});
+       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
+       inputTextArea.getActionMap().put(MOVELEFT, new AbstractAction() {
+           @Override
+           public void actionPerformed(ActionEvent e){
+               myCanvass.shiftLeft();
+           }});
+    //RIGHT Key Binding==============================================================
+        final String MOVERIGHT = "MoveRIGHT";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
+        actionMap.put(MOVERIGHT, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                myCanvass.shiftRight();
+            }});
+       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
+       inputTextArea.getActionMap().put(MOVERIGHT, new AbstractAction() {
+           @Override
+           public void actionPerformed(ActionEvent e){
+               myCanvass.shiftRight();
+           }});
     //UP Key Binding================================================================
         final String MOVEUP = "MoveUp";
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,KeyEvent.CTRL_DOWN_MASK), MOVEUP);
@@ -135,43 +164,15 @@ public class GUIInterface {
             @Override
             public void actionPerformed(ActionEvent e){
                 myCanvass.shiftDown();
-            }});    
-    //LEFT Key Binding==============================================================
-        final String MOVELEFT = "MoveLeft";
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
-        actionMap.put(MOVELEFT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                myCanvass.shiftLeft();
-            }});    
-        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
-        inputTextArea.getActionMap().put(MOVELEFT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                myCanvass.shiftLeft();
-            }});
-    //RIGHT Key Binding==============================================================
-        final String MOVERIGHT = "MoveRIGHT";
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
-        actionMap.put(MOVERIGHT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                myCanvass.shiftRight();
-            }});    
-        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
-        inputTextArea.getActionMap().put(MOVERIGHT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                myCanvass.shiftRight();
             }});
     //ENTER Key Binding==============================================================
-        final String ENTER = "ENTER";
-        inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), ENTER);
-        inputTextArea.getActionMap().put(ENTER, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                TextUpDate();
-            }});
+        // final String ENTER = "ENTER";
+        // inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), ENTER);
+        // inputTextArea.getActionMap().put(ENTER, new AbstractAction() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e){
+        //         TextUpDate();
+        //     }});
     //PLUS Key Binding==============================================================
         final String PLUS = "PLUS";
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK), PLUS);
@@ -283,14 +284,18 @@ class Canvass extends JPanel {
         super.paintComponent(shape);
         //draw coordinate system
         final int size = 500;
+        shape.setColor(Color.BLACK);
         shape.drawLine(0, CenterY, size, CenterY);
         shape.drawLine(CenterX, 0, CenterX, size);
         Stack<SHAPE> shapeToDrawStack2 = new Stack<>();
 
+        shape.setColor(Color.BLUE);
         while (!(shapeToDrawStack.isEmpty())) {
             while (!shapeToDrawStack.isEmpty()) {
                 SHAPE shapeToDraw = shapeToDrawStack.pop();
                 shapeToDrawStack2.push(shapeToDraw);
+                //不画被删除的图形
+                if (!shapeToDraw.isEXIST()) continue;
 
                 switch (shapeToDraw) {
                     case Rectangle s -> {
@@ -317,6 +322,7 @@ class Canvass extends JPanel {
                 }
             }
         }
+        shapeToDrawStack = shapeToDrawStack2;
     }
     // 　　　　　　　＿人人人人人人人人人人人人人＿_                            ,,....,, _
     // 　　　　　　　＞　　ゆっくりしていってね！！！＜             ／::::::::::::::::: " ' :; ,,,
