@@ -1,10 +1,16 @@
 package COMP2021_Project;
 import java.util.Scanner;
 
+/**
+ * The interface of the whole project
+ */
 public class INTERFACE {
     private static Scanner scanner = new Scanner(System.in);
+
+    /**
+     * @param args parameter inputs when run the program
+     */
     public static void main(String[] args) {
-        /**@lqc: 确保两个文件路径有效才进行下一步的程序*/
         if(!(LOGS.IshtmlPathEffective(args)&&LOGS.IstxtPathEffective(args))){
             System.out.println("Please try again!");
             return;
@@ -18,19 +24,11 @@ public class INTERFACE {
             int n=inputs.length;
             String command=inputs[0].toLowerCase();
             IS_EFFECTIVE sign=new IS_EFFECTIVE(inputs,command);
-            /**@lqc: 在选择指令之前检测输入是否有效*/
             if(!sign.IsEffective()){
-                /*
-                if(sign.IsDuplicate()){
-                    System.out.println("Duplicate shape! Please try again.");
-                    continue;
-                }
-                */
                 System.out.println("Please try again!");
                 continue;
             }
             new LOGS(inputs);
-            //gui.updateOutput("666");
             double x,y;
             switch (command){
                 case "rectangle":
@@ -88,7 +86,6 @@ public class INTERFACE {
                     /**@lqc: 在这里关闭并保存日志*/
                     LOGS.CloseFile();
                     System.exit(0);
-                    //return;
             }
         }
     }

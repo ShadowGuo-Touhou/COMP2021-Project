@@ -2,7 +2,7 @@ package COMP2021_Project;
 
 
 /**
- *
+ * Judge whether the inputs from INTERFACE is effective
  */
 public class IS_EFFECTIVE {
     private String[] inputs;
@@ -10,7 +10,7 @@ public class IS_EFFECTIVE {
 
     /**
      * @param inputs input from INTERFACE
-     * @param command input
+     * @param command the command type of input
      */
     public IS_EFFECTIVE(String[] inputs, String command){
         this.inputs=inputs;
@@ -88,6 +88,10 @@ public class IS_EFFECTIVE {
         }
         return true;
     }
+
+    /**
+     * @return whether the input is effective
+     */
     protected boolean IsEffective(){
         int n=inputs.length;
         if(this.IsWrongNumberOfParameters()){
@@ -112,7 +116,6 @@ public class IS_EFFECTIVE {
                         return false;
                     }
                 }
-                /**检查边长、半径是否为正数，检查线段两端点是否重合*/
                 if(command.equals("rectangle")){
                     if(arg[2]<=0||arg[3]<=0){
                         System.out.println("Error! Width and height must be positive!");
@@ -168,20 +171,10 @@ public class IS_EFFECTIVE {
                     }
                 }
                 return true;
-                /**if(!(IsShapeExist(inputs[2])&&IsShapeExist(inputs[3]))){
-                    return false;
-                }
-                if((inputs[2].equals(inputs[3]))){
-                    System.out.println("Error! The two shapes to be grouped coincide!");
-                    return false;
-                }
-                return true;
-                */
             case "ungroup":
                 if(!IsShapeExist(inputs[1])){
                     return false;
                 }
-                /**利用强制类转换的异常检验，检查图形是否为组的状态*/
                 SHAPE testshape=OPERATION.MAP.get(inputs[1]);
                 if(!(testshape instanceof  Group)){
                     System.out.println("Error! The shape is not a group!");
@@ -215,14 +208,6 @@ public class IS_EFFECTIVE {
                 if(!IsShapeExist(inputs[1])){
                     return false;
                 }
-                /*if(!OPERATION.MAP.containsKey(inputs[1])){
-                    System.out.println("Error! Shape "+inputs[1]+" does not exist!");
-                    return false;
-                }else if(OPERATION.MAP.get(inputs[1]).isEXIST()==false){
-                    System.out.println("Error! Shape "+inputs[1]+" does not exist!");
-                    return false;
-                }
-                 */
                 if(OPERATION.MAP.get(inputs[1]).findFather()!=null){
                     System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
                     return false;
@@ -255,7 +240,6 @@ public class IS_EFFECTIVE {
                     return false;
                 }
                 return true;
-            /**空列表问题将在listall里面处理，暂时不算作无效输入*/
             case "listall":
             case "quit":
                 return true;
