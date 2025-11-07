@@ -6,16 +6,22 @@ import java.util.Scanner;
  */
 public class INTERFACE {
     private static Scanner scanner = new Scanner(System.in);
+    private static GUIInterface gui = new GUIInterface();
 
+    /**
+     * 获取GUI
+     * @return
+     */
+    public static GUIInterface getGui(){return gui;}
     /**
      * @param args parameter inputs when run the program
      */
     public static void main(String[] args) {
         if(!(LOGS.IshtmlPathEffective(args)&&LOGS.IstxtPathEffective(args))){
             System.out.println("Please try again!");
+            gui.updateOutput("Please try again!");
             return;
         }
-        GUIInterface gui = new GUIInterface();
         while(true){
             gui.DrawShape(SHAPE.AllShapes);
             String sc = scanner.nextLine();
@@ -26,6 +32,7 @@ public class INTERFACE {
             IS_EFFECTIVE sign=new IS_EFFECTIVE(inputs,command);
             if(!sign.IsEffective()){
                 System.out.println("Please try again!");
+                gui.updateOutput("Please try again!");
                 continue;
             }
             new LOGS(inputs);
@@ -59,7 +66,9 @@ public class INTERFACE {
                     break;
                 case "boundingbox":
                     double[] box=QUERY.boundingBox(OPERATION.get(inputs[1]));
-                    System.out.printf("%.2f %.2f %.2f %.2f\n",box[0],box[1],box[2],box[3]);
+                    String out = String.format("%.2f %.2f %.2f %.2f\n",box[0],box[1],box[2],box[3]);
+                    System.out.printf(out);
+                    gui.updateOutput(out);
                     break;
                 case "shapeat":
                     x=Double.parseDouble(inputs[1]);
@@ -83,6 +92,7 @@ public class INTERFACE {
                     break;
                 case "quit":
                     System.out.println("Goodbye!");
+                    gui.updateOutput("Goodbye!");
                     /**@lqc: 在这里关闭并保存日志*/
                     LOGS.CloseFile();
                     System.exit(0);

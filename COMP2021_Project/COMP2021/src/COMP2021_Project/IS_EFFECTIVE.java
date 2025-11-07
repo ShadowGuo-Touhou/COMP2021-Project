@@ -7,6 +7,7 @@ package COMP2021_Project;
 public class IS_EFFECTIVE {
     private String[] inputs;
     private String command;
+    private GUIInterface gui = INTERFACE.getGui();
 
     /**
      * @param inputs input from INTERFACE
@@ -19,7 +20,9 @@ public class IS_EFFECTIVE {
     /**判断形状是否重复*/
     private boolean IsDuplicate(){
         if(OPERATION.MAP.containsKey(inputs[1])){
-            System.out.println("Error! Duplicate Shape: " + inputs[1]);
+            String out = String.format("Error! Duplicate Shape: " + inputs[1]);
+            System.out.println(out);
+            gui.updateOutput(out);
             return true;
         }
         return false;
@@ -80,10 +83,14 @@ public class IS_EFFECTIVE {
     /**判断形状和组是否存在*/
     private boolean IsShapeExist(String name){
         if(!(OPERATION.MAP.containsKey(name))){
-            System.out.println("Error! Can't find shape: " + name);
+            String out = String.format("Error! Can't find shape: " + name);
+            System.out.println(out);
+            gui.updateOutput(out);
             return false;
         }else if(!OPERATION.MAP.get(name).isEXIST()){
-            System.out.println("Error! Can't find shape: " + name);
+            String out = String.format("Error! Can't find shape: " + name);
+            System.out.println(out);
+            gui.updateOutput(out);
             return false;
         }
         return true;
@@ -96,6 +103,7 @@ public class IS_EFFECTIVE {
         int n=inputs.length;
         if(this.IsWrongNumberOfParameters()){
             System.out.println("Error! Wrong number of parameters!");
+            gui.updateOutput("Error! Wrong number of parameters!");
             return false;
         }
         switch (command){
@@ -112,28 +120,34 @@ public class IS_EFFECTIVE {
                     try {
                         arg[i] = Double.parseDouble(inputs[2+i]);
                     } catch (NumberFormatException e) {
-                        System.out.println("Wrong parameter format: " + inputs[2 + i]);
+                        String out = String.format("Wrong parameter format: " + inputs[2 + i]);
+                        System.out.println(out);
+                        gui.updateOutput(out);
                         return false;
                     }
                 }
                 if(command.equals("rectangle")){
                     if(arg[2]<=0||arg[3]<=0){
                         System.out.println("Error! Width and height must be positive!");
+                        gui.updateOutput("Error! Width and height must be positive!");
                         return false;
                     }
                 }else if(command.equals("line")){
                     if(arg[0]==arg[2]&&arg[1]==arg[3]){
                         System.out.println("Error! The two endpoints of the line segment coincide!");
+                        gui.updateOutput("Error! The two endpoints of the line segment coincide!");
                         return false;
                     }
                 }else if(command.equals("circle")){
                     if(arg[2]<=0){
                         System.out.println("Error! Radius must be positive!");
+                        gui.updateOutput("Error! Radius must be positive!");
                         return false;
                     }
                 }else if(command.equals("square")){
                     if(arg[2]<=0){
                         System.out.println("Error! Side length must be positive!");
+                        gui.updateOutput("Error! Side length must be positive!");
                         return false;
                     }
                 }
@@ -166,6 +180,7 @@ public class IS_EFFECTIVE {
                     for(int j=i+1;j<n-2;j++){
                         if(inputs[2+i].equals(inputs[2+j])){
                             System.out.println("Error! The shapes to be grouped coincide!");
+                            gui.updateOutput("Error! The shapes to be grouped coincide!");
                             return false;
                         }
                     }
@@ -178,6 +193,7 @@ public class IS_EFFECTIVE {
                 SHAPE testshape=OPERATION.MAP.get(inputs[1]);
                 if(!(testshape instanceof  Group)){
                     System.out.println("Error! The shape is not a group!");
+                    gui.updateOutput("Error! The shape is not a group!");
                     return false;
                 }
                 return true;
@@ -188,7 +204,9 @@ public class IS_EFFECTIVE {
                     return false;
                 }
                 if(OPERATION.MAP.get(inputs[1]).findFather()!=null){
-                    System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    String out = String.format("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 return true;
@@ -196,20 +214,26 @@ public class IS_EFFECTIVE {
                 try {
                     double x = Double.parseDouble(inputs[2]);
                 }catch(NumberFormatException e){
-                    System.out.println("Wrong parameter format: " + inputs[2]);
+                    String out = String.format("Wrong parameter format: " + inputs[2]);
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 try {
                     double x = Double.parseDouble(inputs[3]);
                 }catch(NumberFormatException e){
-                    System.out.println("Wrong parameter format: " + inputs[3]);
+                    String out = String.format("Wrong parameter format: " + inputs[3]);
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 if(!IsShapeExist(inputs[1])){
                     return false;
                 }
                 if(OPERATION.MAP.get(inputs[1]).findFather()!=null){
-                    System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    String out = String.format("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 return true;
@@ -217,13 +241,17 @@ public class IS_EFFECTIVE {
                 try {
                     double x = Double.parseDouble(inputs[1]);
                 }catch(NumberFormatException e){
-                    System.out.println("Wrong parameter format: " + inputs[1]);
+                    String out = String.format("Wrong parameter format: " + inputs[1]);
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 try {
                     double x = Double.parseDouble(inputs[2]);
                 }catch(NumberFormatException e){
-                    System.out.println("Wrong parameter format: " + inputs[2]);
+                    String out = String.format("Wrong parameter format: " + inputs[2]);
+                    System.out.println(out);
+                    gui.updateOutput(out);
                     return false;
                 }
                 return true;
@@ -232,11 +260,13 @@ public class IS_EFFECTIVE {
                     return false;
                 }
                 if(OPERATION.MAP.get(inputs[1]).findFather()!=null){
-                    System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    String out = "Error! Operation "+command+" can't be used on a single shape in a group!";
+                    System.out.println(out);
                     return false;
                 }
                 if(OPERATION.MAP.get(inputs[2]).findFather()!=null){
-                    System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
+                    String out = "Error! Operation "+command+" can't be used on a single shape in a group!";
+                    System.out.println(out);
                     return false;
                 }
                 return true;
@@ -246,17 +276,20 @@ public class IS_EFFECTIVE {
             case "undo":
                 if(OPERATION.pastOperation.isEmpty()){
                     System.out.println("Error! No operation can be undone!");
+                    gui.updateOutput("Error! No operation can be undone!");
                     return false;
                 }
                 return true;
             case "redo":
                 if(OPERATION.undoOperation.isEmpty()){
                     System.out.println("Error! No operation can be redone!");
+                    gui.updateOutput("Error! No operation can be redone!");
                     return false;
                 }
                 return true;
             default:
                 System.out.println("Error! Unknown command!");
+                gui.updateOutput("Error! Unknown command!");
                 return false;
         }
     }
