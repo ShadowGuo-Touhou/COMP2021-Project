@@ -210,10 +210,10 @@ class UNGROUP extends OPERATION {
         this.Z=it.Z();
         it.setEXIST(false);
         Group Father=(Group)it.findFather();
-        Father.getMembers().remove(it);
+        if(Father!=null)Father.getMembers().remove(it);
         for (SHAPE member : it.getMembers()) {
             member.setFather(null);
-            Father.add(member);
+            if(Father!=null)Father.add(member);
         }
         pastOperation.push(this);
     }
@@ -226,10 +226,10 @@ class UNGROUP extends OPERATION {
 
         // 恢复成员独立状态
         Group Father=(Group)group.findFather();
-        Father.getMembers().remove(group);
+        if(Father!=null)Father.getMembers().remove(group);
         for (SHAPE member : group.getMembers()) {
             member.setFather(null);
-            Father.add(member);
+            if(Father!=null)Father.add(member);
         }
     }
 
@@ -244,10 +244,10 @@ class UNGROUP extends OPERATION {
         Group Father=(Group)group.findFather();
         for (SHAPE member : group.getMembers()) {
             member.setFather(group);
-            Father.getMembers().remove(member);
+            if(Father!=null)Father.getMembers().remove(member);
         }
         group.setFather(null);
-        Father.add(group);
+        if(Father!=null)Father.add(group);
     }
 }
 
@@ -331,4 +331,5 @@ class MOVE extends OPERATION {
         SHAPE shape = MAP.get(NAME);
         shape.move(-x,-y);
     }
+
 }
