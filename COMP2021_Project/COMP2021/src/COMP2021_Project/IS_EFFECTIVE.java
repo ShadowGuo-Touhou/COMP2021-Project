@@ -212,13 +212,17 @@ public class IS_EFFECTIVE {
                     System.out.println("Wrong parameter format: " + inputs[3]);
                     return false;
                 }
-                if(!OPERATION.MAP.containsKey(inputs[1])){
+                if(!IsShapeExist(inputs[1])){
+                    return false;
+                }
+                /*if(!OPERATION.MAP.containsKey(inputs[1])){
                     System.out.println("Error! Shape "+inputs[1]+" does not exist!");
                     return false;
                 }else if(OPERATION.MAP.get(inputs[1]).isEXIST()==false){
                     System.out.println("Error! Shape "+inputs[1]+" does not exist!");
                     return false;
                 }
+                 */
                 if(OPERATION.MAP.get(inputs[1]).findFather()!=null){
                     System.out.println("Error! Operation "+command+" can't be used on a single shape in a group!");
                     return false;
