@@ -4,6 +4,9 @@ import java.util.Scanner;
 public class INTERFACE {
     private static Scanner scanner = new Scanner(System.in);
     private static GUIInterface gui = new GUIInterface();
+    static GUIInterface getGui(){
+        return gui;
+    }
     public static void deal(String sc){
         gui.DrawShape(SHAPE.AllShapes);
         String[] inputs = sc.trim().split(" ");
