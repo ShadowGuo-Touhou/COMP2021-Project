@@ -4,12 +4,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- *
+ * Write
  */
 public class INTERFACETest {
     @Test
     public void testCoverage(){
-        INTERFACE.filePathTest(new String[]{System.getProperty("user.dir"),System.getProperty("user.dir")});
+        INTERFACE.filePathTest(new String[]{"-txt",System.getProperty("user.dir"),"-html",System.getProperty("user.dir")});
 
         INTERFACE.commandProcess("rectangle rect1 10 10 50 30");
         try {
