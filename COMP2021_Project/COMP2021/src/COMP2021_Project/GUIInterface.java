@@ -52,7 +52,7 @@ public class GUIInterface {
      */
     private void CreateMainDisplayFrame(){
         // System.out.println("On EDT = "+ SwingUtilities.isEventDispatchThread()); //Debug Info
-        mainDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit on close
+//        mainDisplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit on close
         // mainDisplayFrame.setResizable(false); //Set if the window is resizable
         //============================================================================================\\
         mainDisplayFrame.setLayout(new GridBagLayout()); //Set layout
