@@ -114,7 +114,7 @@ public class GUIInterface {
     }
 //=====================================================================================================\\
     private void ButtonFunctions(){
-        enterButton.addActionListener((e)->TextUpDate());
+//        enterButton.addActionListener((e)->TextUpDate());
         zoomInButton.addActionListener((e)->myCanvass.zoomIn());
         zoomOutButton.addActionListener((e)->myCanvass.zoomOut());
     //Set up key binding============================================================
@@ -190,19 +190,21 @@ public class GUIInterface {
                 myCanvass.zoomOut();
             }});    
     }
+//==============================Move functions========================
+
 
 //==================================Handle Enter button===============================================\\
     /*
      * 将输入栏清空，并保存用户输入结果后写入输出栏，
      */
-    private void TextUpDate(){
-        String getText = inputTextArea.getText();
-        this.userInputString = getText;
-        outputTextArea.append(getText+"\n");
-        if (getText.equals("")) return;
-        inputTextArea.selectAll();
-        inputTextArea.replaceSelection("");
-    }
+//    private void TextUpDate(){
+//        String getText = inputTextArea.getText();
+//        this.userInputString = getText;
+//        outputTextArea.append(getText+"\n");
+//        if (getText.equals("")) return;
+//        inputTextArea.selectAll();
+//        inputTextArea.replaceSelection("");
+//    }
     
     /**@return
      * 这个方法可以获取用户输入，返回String
@@ -245,29 +247,29 @@ class Canvass extends JPanel {
         // setUpButtonFunction();
     }
 
-    private void setUpButtonFunction(){
-        final int buttonWidth = 20;
-        final int buttonHeigh = 20;
-        JButton ShiftUpButton = new JButton("↑");
-        ShiftUpButton.setPreferredSize(new Dimension(buttonWidth,10));
-        JButton ShiftDownButton = new JButton("↓");
-        ShiftDownButton.setPreferredSize(new Dimension(buttonWidth,10));
-        JButton ShiftLeftButton = new JButton("←");
-        ShiftLeftButton.setPreferredSize(new Dimension(10,buttonHeigh));
-        JButton ShiftRightButton = new JButton("→");
-        ShiftRightButton.setPreferredSize(new Dimension(10,buttonHeigh));
-        //add buttons to canvas
-        setLayout(new BorderLayout());
-        add(ShiftUpButton,BorderLayout.NORTH);
-        add(ShiftDownButton, BorderLayout.SOUTH);
-        add(ShiftLeftButton, BorderLayout.WEST);
-        add(ShiftRightButton, BorderLayout.EAST);
-        
-        ShiftUpButton.addActionListener(e->shiftUp());
-        ShiftDownButton.addActionListener(e->shiftDown());
-        ShiftLeftButton.addActionListener(e->shiftLeft());
-        ShiftRightButton.addActionListener(e->shiftRight());
-    }
+//    private void setUpButtonFunction(){
+//        final int buttonWidth = 20;
+//        final int buttonHeigh = 20;
+//        JButton ShiftUpButton = new JButton("↑");
+//        ShiftUpButton.setPreferredSize(new Dimension(buttonWidth,10));
+//        JButton ShiftDownButton = new JButton("↓");
+//        ShiftDownButton.setPreferredSize(new Dimension(buttonWidth,10));
+//        JButton ShiftLeftButton = new JButton("←");
+//        ShiftLeftButton.setPreferredSize(new Dimension(10,buttonHeigh));
+//        JButton ShiftRightButton = new JButton("→");
+//        ShiftRightButton.setPreferredSize(new Dimension(10,buttonHeigh));
+//        //add buttons to canvas
+//        setLayout(new BorderLayout());
+//        add(ShiftUpButton,BorderLayout.NORTH);
+//        add(ShiftDownButton, BorderLayout.SOUTH);
+//        add(ShiftLeftButton, BorderLayout.WEST);
+//        add(ShiftRightButton, BorderLayout.EAST);
+//
+//        ShiftUpButton.addActionListener(e->shiftUp());
+//        ShiftDownButton.addActionListener(e->shiftDown());
+//        ShiftLeftButton.addActionListener(e->shiftLeft());
+//        ShiftRightButton.addActionListener(e->shiftRight());
+//    }
     /*
      * Return the size for the pack() in main display GUI
      */
@@ -362,7 +364,7 @@ class Canvass extends JPanel {
     /**
      * Shift window left
      */
-    protected void shiftLeft(){
+    public void shiftLeft(){
         this.CenterX+=shiftDistance;
         updateCanvas();
     }
@@ -370,7 +372,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Right
      */
-    protected void shiftRight(){
+    public void shiftRight(){
         this.CenterX-=shiftDistance;
         updateCanvas();
     }
@@ -378,7 +380,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Up
      */
-    protected void shiftUp(){
+    public void shiftUp(){
         this.CenterY+=shiftDistance;
         updateCanvas();
     }
@@ -386,7 +388,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Down
      */
-    protected void shiftDown(){
+    public void shiftDown(){
         this.CenterY-=shiftDistance;
         updateCanvas();
     }
@@ -394,7 +396,7 @@ class Canvass extends JPanel {
     /**
      * Zoom in view
      */
-    protected void zoomIn(){
+    public void zoomIn(){
         zoomRate+=1;
         updateCanvas();
     }
