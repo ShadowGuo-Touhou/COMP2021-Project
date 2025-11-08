@@ -404,7 +404,7 @@ class Canvass extends JPanel {
     /**
      * Zoom out view
      */
-    protected void zoomOut(){
+    public void zoomOut(){
         if(zoomRate==1)return;
         zoomRate-=1;
         updateCanvas();

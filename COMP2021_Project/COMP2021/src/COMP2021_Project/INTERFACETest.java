@@ -16,7 +16,14 @@ public class INTERFACETest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         INTERFACE.commandProcess("rectangle rect1 10 10 50 30");
+        INTERFACE.commandProcess("rectangle rect2 20 20 50");
+        INTERFACE.commandProcess("rectangle rect2 20 20 50 -10");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("redo");
         INTERFACE.commandProcess("line line1 5 5 45 25");
         INTERFACE.commandProcess("circle circle1 30 30 15");
         INTERFACE.commandProcess("square square1 60 60 25");
@@ -27,14 +34,19 @@ public class INTERFACETest {
         INTERFACE.commandProcess("boundingbox rect1");
         INTERFACE.commandProcess("undo");
         INTERFACE.commandProcess("shapeAt 15 15");
-        INTERFACE.commandProcess("redo");
         INTERFACE.commandProcess("intersect rect1 circle1");
         INTERFACE.commandProcess("move rect1 5 -5");
+        INTERFACE.commandProcess("delete rect1");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("delete rect2");
+        INTERFACE.commandProcess("delete rect1 rect2");
+        INTERFACE.commandProcess("move rect1 5 -5 2");
         INTERFACE.commandProcess("resultdo");
         INTERFACE.commandProcess("move circle1 -10 10");
         INTERFACE.commandProcess("group group1 rect1 circle1 line1 square1");
         INTERFACE.commandProcess("delete group1");
         INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("move rect1 1 1");
         INTERFACE.commandProcess("list group1");
         INTERFACE.commandProcess("move group1 20 -20");
         INTERFACE.commandProcess("boundingbox group1");
@@ -62,13 +74,18 @@ public class INTERFACETest {
         INTERFACE.commandProcess("rectangle innerRect1 100 100 20 20");
         INTERFACE.commandProcess("circle innerCircle1 120 120 10");
         INTERFACE.commandProcess("group innerGroup innerRect1 innerCircle1");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
         INTERFACE.commandProcess("rectangle outerRect 90 90 50 50");
         INTERFACE.commandProcess("group complexGroup innerGroup outerRect");
         INTERFACE.commandProcess("list complexGroup");
+        INTERFACE.commandProcess("undo");
         INTERFACE.commandProcess("redo");
         INTERFACE.commandProcess("listAll");
         INTERFACE.commandProcess("undo");
         INTERFACE.commandProcess("ungroup innerGroup");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
         INTERFACE.commandProcess("list complexGroup");
         INTERFACE.commandProcess("listAll");
         INTERFACE.commandProcess("move innerRect1 5 5");
@@ -93,6 +110,5 @@ public class INTERFACETest {
         INTERFACE.commandProcess("move batchGroup2 10 -10");
         INTERFACE.commandProcess("ungroup nestedGroup");
         INTERFACE.commandProcess("quit");
-        assertTrue(true);
     }
 }
