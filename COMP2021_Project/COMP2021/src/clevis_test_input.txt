@@ -1,4 +1,3 @@
-# ===== 第一部分：正常操作 =====
 rectangle rect1 10 10 50 30
 line line1 5 5 45 25
 circle circle1 30 30 15
@@ -7,7 +6,7 @@ rectangle rect2 80 20 40 40
 list rect1
 listAll
 boundingbox rect1
-shapeAt 15 15
+shapeAt 30 15
 intersect rect1 circle1
 move rect1 5 -5
 move circle1 -10 10
@@ -18,9 +17,9 @@ move group1 20 0
 intersect group1 rect2
 ungroup group1
 move rect1 -5 5
-list rect1
-
-# ===== 第二部分：错误操作 =====
+group group2 rect1 rect2
+delete group2
+listAll
 rectangle rect1 0 0 10 10
 move nonexistent 10 10
 list ghost
@@ -33,8 +32,7 @@ group empty_group
 group group2 rect1 nonexistent
 ungroup nonexistent_group
 ungroup rect1
-
-# ===== 第三部分：奇异操作 =====
+notanoperation hi find 6
 rectangle innerRect1 100 100 20 20
 circle innerCircle1 120 120 10
 group innerGroup innerRect1 innerCircle1
@@ -47,9 +45,6 @@ list complexGroup
 listAll
 move innerRect1 5 5
 group groupA rect1
-group groupB groupA
-
-# ===== 第四部分：复杂场景测试 =====
 rectangle autoRect1 0 0 25 20
 circle autoCircle2 50 50 8
 rectangle autoRect3 30 25 25 20
@@ -60,8 +55,8 @@ rectangle autoRect7 90 75 25 20
 circle autoCircle8 155 140 14
 rectangle autoRect9 120 100 25 20
 circle autoCircle10 190 170 16
-group batchGroup1 autoRect1 autoCircle1 autoRect2
-group batchGroup2 autoCircle2 autoCircle3
+group batchGroup1 autoRect1 autoCircle2 autoRect3
+group batchGroup2 autoCircle6 autoCircle8
 group nestedGroup batchGroup1 autoRect3
 listAll
 boundingbox nestedGroup
