@@ -19,7 +19,7 @@ public class INTERFACE {
             System.out.println("Please try again!");
             return;
         }
-//        new LOGS(inputs);
+        new LOGS(inputs);
         //gui.updateOutput("666");
         double x,y;
         switch (command){
@@ -76,7 +76,7 @@ public class INTERFACE {
             case "quit":
                 System.out.println("Goodbye!");
                 /**@lqc: 在这里关闭并保存日志*/
-//                LOGS.CloseFile();
+                LOGS.CloseFile();
                 System.exit(0);
                 //return;
         }
@@ -88,7 +88,7 @@ public class INTERFACE {
             return;
         }
         while(true){
-            String sc = scanner.nextLine();
+            String[] sc = {"C:\\Users\\yzdnh\\Desktop\\project\\COMP2021-Project\\COMP2021_Project\\COMP2021\\src\\COMP2021_Project", "C:\\Users\\yzdnh\\Desktop\\project\\COMP2021-Project\\COMP2021_Project\\COMP2021\\src\\COMP2021_Project"};
             deal(sc);
         }
     }
