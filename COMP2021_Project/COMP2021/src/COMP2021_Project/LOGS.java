@@ -157,30 +157,30 @@ public class LOGS {
      * @param n index of the target line of command
      * @return the target line of command
      */
-    public String getCommand(int n){
-        if(n<1){
-            System.out.println("Error! Invalid command index.");
-            return null;
-        }
-        String line=null;
-        try {
-            BufferedReader txtReader = new BufferedReader(new FileReader("log.txt"));
-            for(int i=0;i<n;i++){
-                try{
-                    line= txtReader.readLine();
-                    if(line==null){
-                        System.out.println("Error! Invalid command index.");
-                        return null;
-                    }
-                }catch(IOException e){
-                    System.out.println("Error! Failed to read txt file: "+txtPath);
-                    return null;
-                }
-            }
-            return line;
-        }catch(FileNotFoundException e){
-            System.out.println("Error! Failed to open txt file: "+txtPath);
-            return null;
-        }
-    }
+//    public String getCommand(int n){
+//        if(n<1){
+//            System.out.println("Error! Invalid command index.");
+//            return null;
+//        }
+//        String line=null;
+//        try {
+//            BufferedReader txtReader = new BufferedReader(new FileReader("log.txt"));
+//            for(int i=0;i<n;i++){
+//                try{
+//                    line= txtReader.readLine();
+//                    if(line==null){
+//                        System.out.println("Error! Invalid command index.");
+//                        return null;
+//                    }
+//                }catch(IOException e){
+//                    System.out.println("Error! Failed to read txt file: "+txtPath);
+//                    return null;
+//                }
+//            }
+//            return line;
+//        }catch(FileNotFoundException e){
+//            System.out.println("Error! Failed to open txt file: "+txtPath);
+//            return null;
+//        }
+//    }
 }
