@@ -364,7 +364,7 @@ class Canvass extends JPanel {
     /**
      * Shift window left
      */
-    public void shiftLeft(){
+    protected void shiftLeft(){
         this.CenterX+=shiftDistance;
         updateCanvas();
     }
@@ -372,7 +372,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Right
      */
-    public void shiftRight(){
+    protected void shiftRight(){
         this.CenterX-=shiftDistance;
         updateCanvas();
     }
@@ -380,7 +380,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Up
      */
-    public void shiftUp(){
+    protected void shiftUp(){
         this.CenterY+=shiftDistance;
         updateCanvas();
     }
@@ -388,7 +388,7 @@ class Canvass extends JPanel {
     /**
      * Shift window Down
      */
-    public void shiftDown(){
+    protected void shiftDown(){
         this.CenterY-=shiftDistance;
         updateCanvas();
     }
@@ -396,7 +396,7 @@ class Canvass extends JPanel {
     /**
      * Zoom in view
      */
-    public void zoomIn(){
+    protected void zoomIn(){
         zoomRate+=1;
         updateCanvas();
     }

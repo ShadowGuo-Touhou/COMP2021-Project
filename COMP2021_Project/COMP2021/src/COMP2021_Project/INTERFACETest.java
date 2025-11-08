@@ -3,6 +3,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
 /**
  * Write
  */
@@ -110,5 +114,35 @@ public class INTERFACETest {
         INTERFACE.commandProcess("move batchGroup2 10 -10");
         INTERFACE.commandProcess("ungroup nestedGroup");
         INTERFACE.commandProcess("quit");
+    }
+
+    @Test
+    public void testGui() throws AWTException {
+        INTERFACE.filePathTest(new String[]{"-txt",System.getProperty("user.dir"),"-html",System.getProperty("user.dir")});
+        GUIInterface gui=INTERFACE.getGui();
+        Robot robot = new Robot();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_DOWN);
+        robot.keyPress(KeyEvent.VK_UP);
+        robot.keyPress(KeyEvent.VK_LEFT);
+        robot.keyPress(KeyEvent.VK_RIGHT);
+        robot.keyPress(KeyEvent.VK_EQUALS);
+        robot.keyPress(KeyEvent.VK_MINUS);
+        //Key press test
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+        robot.keyRelease(KeyEvent.VK_DOWN);
+        robot.keyRelease(KeyEvent.VK_UP);
+        robot.keyRelease(KeyEvent.VK_LEFT);
+        robot.keyRelease(KeyEvent.VK_RIGHT);
+        robot.keyRelease(KeyEvent.VK_EQUALS);
+        robot.keyRelease(KeyEvent.VK_MINUS);
+
     }
 }
