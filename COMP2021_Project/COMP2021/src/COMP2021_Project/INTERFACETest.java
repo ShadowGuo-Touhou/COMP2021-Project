@@ -1,21 +1,27 @@
 package COMP2021_Project;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
 /**
- * Write
+ * Test for line coverage
  */
 public class INTERFACETest {
+    /**
+     * Test for line coverage
+     */
     @Test
-    public void testCoverage() throws AWTException {
+    public void testCoverage()  {
         INTERFACE.filePathTest(new String[]{"-txt",System.getProperty("user.dir"),"-html",System.getProperty("user.dir")});
         GUIInterface gui=INTERFACE.getGui();
-        Robot robot = new Robot();
+        Robot robot;
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
+            throw new RuntimeException(e);
+        }
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -134,5 +140,4 @@ public class INTERFACETest {
         //quit
         INTERFACE.commandProcess("quit");
     }
-
 }

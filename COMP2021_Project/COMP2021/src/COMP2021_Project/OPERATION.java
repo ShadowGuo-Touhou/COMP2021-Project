@@ -4,38 +4,38 @@ import java.util.Stack;
 import java.util.HashMap;
 
 /**
- * 所有可以进行 redo 和 undo 的操作
- * 包括 创建形状或组 (CREATE 和 GROUP), 取消组 (UNGROUP), 删除 (DELETE), 移动(MOVE)
+ * All operations that can redo and undo
+ * INCLUDE CREATE  GROUP UNGROUP DELETE MOVE
  */
 public abstract class OPERATION {
 
     /**
-     * 该操作对应的图形的名字
+     * name of corresponding shape
      */
     protected String NAME;
     /**
-     * 映射：名字 -> 图形
+     * name -> shape
      */
     protected static final HashMap<String, SHAPE> MAP = new HashMap<>();
     /**
-     * 表示过去进行过的操作
+     * past operation
      */
     protected static final Stack<OPERATION> pastOperation = new Stack<>();
     /**
-     * 表示被撤销的操作
+     * undo operation
      */
     protected static final Stack<OPERATION> undoOperation = new Stack<>();
 
     /**
-     * @param s 表示图形的名称
-     * @return 相应的图形
+     * @param s name
+     * @return shape
      */
     public static SHAPE get(String s) {
         return MAP.get(s);
     }
 
     /**
-     * 重做被 undo 的操作
+     * global redo
      */
     static void REDO() {
         OPERATION it = undoOperation.pop();
@@ -44,7 +44,7 @@ public abstract class OPERATION {
     }
 
     /**
-     * 撤销操作
+     * global undo
      */
     static void UNDO() {
         OPERATION it = pastOperation.pop();
@@ -53,33 +53,33 @@ public abstract class OPERATION {
     }
 
     /**
-     * 重做当前操作
-     * 抽象方法，需要在子类中实现
+     * redo this operation
+     * abstacted method
      */
     protected abstract void redo();
 
     /**
-     * 撤销当前操作
-     * 抽象方法，需要在子类中实现
+     * undo this operation
+     * abstracted method
      */
     protected abstract void undo();
 }
 
 /**
- * 创建非组图形的操作
+ * create a non-group shape
  */
 class CREATE extends OPERATION {
-    private int Z;
+    private final int Z;
 
     /**
-     * @param type 需要创造的图形的类型：rectangle、circle、line、square
-     * @param name 图形的名字
-     * @param arg  与图形有关的参数
+     * @param type type to create: rectangle circle line square
+     * @param name name of shape
+     * @param arg related parameters
      */
     CREATE(String type,String name,double[] arg){
         undoOperation.clear();
         this.NAME=name;
-        this.Z=++SHAPE.MAXZ;
+        this.Z=SHAPE.MAXZplus();
         SHAPE.AllShapes[Z] = switch (type) {
             case "rectangle" -> new Rectangle(name, arg[0], arg[1], arg[2], arg[3], Z);
             case "circle" -> new Circle(name, arg[0], arg[1], arg[2], Z);
@@ -108,19 +108,19 @@ class CREATE extends OPERATION {
 }
 
 /**
- * 创建组的操作
+ * create a group
  */
 class _GROUP extends OPERATION {
-    private int Z;
+    private final int Z;
 
     /**
-     * @param name    图形的名字
-     * @param members 组所包含的图形
+     * @param name    name of group
+     * @param members member of group
      */
     _GROUP(String name,String[] members){
         undoOperation.clear();
         this.NAME=name;
-        Z=++SHAPE.MAXZ;
+        Z=SHAPE.MAXZplus();
         SHAPE.AllShapes[Z]= new Group(name,Z);
         Group it=(Group) SHAPE.AllShapes[Z];
         MAP.put(name,it);
@@ -155,12 +155,12 @@ class _GROUP extends OPERATION {
 }
 
 /**
- * 解散组的操作
+ * ungroup a group
  */
 class UNGROUP extends OPERATION {
-    private int Z;
+    private final int Z;
     /**
-     * @param name 被解散的组的名字
+     * @param name name of group to be ungrouped
      */
     UNGROUP(String name) {
         undoOperation.clear();
@@ -183,8 +183,6 @@ class UNGROUP extends OPERATION {
         Group group=(Group)SHAPE.AllShapes[Z];
         group.setEXIST(false);
         MAP.remove(NAME);
-
-        // 恢复成员独立状态
         Group Father=(Group)group.findFather();
         if(Father!=null)Father.getMembers().remove(group);
         for (SHAPE member : group.getMembers()) {
@@ -196,11 +194,8 @@ class UNGROUP extends OPERATION {
     @Override
     protected void undo() {
         Group group=(Group)SHAPE.AllShapes[Z];
-
-        // 恢复组状态
         group.setEXIST(true);
         MAP.put(NAME,group);
-        // 恢复成员关系
         Group Father=(Group)group.findFather();
         for (SHAPE member : group.getMembers()) {
             member.setFather(group);
@@ -212,10 +207,10 @@ class UNGROUP extends OPERATION {
 }
 
 /**
- * 删除图形的操作
+ * delete a shape
  */
 class DELETE extends OPERATION {
-    private int Z;
+    private final int Z;
     private void noLongerExist(SHAPE shape) {
         shape.setEXIST(false);
         MAP.remove(shape.Name());
@@ -236,7 +231,7 @@ class DELETE extends OPERATION {
     }
 
     /**
-     * @param name 被删除的图形的名称
+     * @param name name of shape to be deleted
      */
     DELETE(String name) {
         undoOperation.clear();
@@ -261,15 +256,15 @@ class DELETE extends OPERATION {
 }
 
 /**
- * 移动图形的操作
+ * move a shape
  */
 class MOVE extends OPERATION {
-    private double x, y;
+    private final double x,y;
 
     /**
-     * @param name 所移动图形的名称
-     * @param x    x正方向移动的距离
-     * @param y    y正方向移动的距离
+     * @param name name of the shape to be moved
+     * @param x    The distance moved in the positive direction of x
+     * @param y    The distance moved in the positive direction of y
      */
     MOVE(String name, double x, double y) {
         undoOperation.clear();

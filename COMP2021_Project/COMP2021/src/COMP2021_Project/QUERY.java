@@ -1,13 +1,13 @@
 package COMP2021_Project;
 
 /**
- * 所有询问
- * 包括 boundingbox, shapeAt, intersect, list, listall
+ * ALL QUERIES
+ * INCLUDE boundingbox, shapeAt, intersect, list, listall
  */
 public class QUERY {
-    /** 询问图形的边界框
-     * @param shape 所询问的图形
-     * @return 图形边界框的左上角顶点的坐标和长与宽
+    /** Ask about the bounding box of the shape
+     * @param shape The inquired shape
+     * @return the bounding box
      */
     public static double[] boundingBox(SHAPE shape){
         double Bx=0,By=0,Bw=0,Bh=0;
@@ -50,13 +50,13 @@ public class QUERY {
         return new double[]{Bx,By,Bw,Bh};
     }
 
-    /** 询问在 (x,y) 处 Z Order 最高的图形的名字
-     * @param x 所询问的x坐标
-     * @param y 所询问的y坐标
-     * @return 所在坐标 Z order 最高的图形的名字
+    /** Ask for the shape with the highest Z Order at (x,y)
+     * @param x The inquired x-coordinate
+     * @param y The inquired y-coordinate
+     * @return shape with highest Z order at (x,y)
      */
     public static String shapeAt(double x, double y){
-        for(int i=SHAPE.MAXZ;i>0;i--){
+        for(int i=SHAPE.getMAXZ();i>0;i--){
             SHAPE shape=SHAPE.AllShapes[i];
             if(shape.isEXIST() &&shape.findFather()==null&&shape.at(x,y)){
                 return shape.Name();
@@ -68,10 +68,10 @@ public class QUERY {
         return box[0]<=x&&x<=box[0]+box[2]&&box[1]<=y&&y<=box[1]+box[3];
     }
 
-    /** 询问两图行边界框是否有重合
-     * @param shape1 图形1
-     * @param shape2 图形2
-     * @return 两图形边界框是否有重合
+    /**
+     * @param shape1 shape1
+     * @param shape2 shape2
+     * @return Whether the two shape bounding boxes overlap
      */
     public static boolean insection(SHAPE shape1,SHAPE shape2){
         double[] box1=boundingBox(shape1),box2=boundingBox(shape2);
@@ -89,9 +89,9 @@ public class QUERY {
         return false;
     }
 
-    /** 询问图形信息
-     * @param shape 所需要列表的图形
-     * 列出该图形的信息
+    /**
+     * @param shape shape to be listed
+     * @param pre retract
      */
     public static void list(SHAPE shape,String pre){
         switch (shape){
@@ -127,11 +127,11 @@ public class QUERY {
         }
     }
 
-    /** 询问所有图形信息
-     * 列出所有图形的信息
+    /**
+     * list all shapes
      */
     public static void listall(){
-        for(int i=1;i<=SHAPE.MAXZ;i++){
+        for(int i=1;i<=SHAPE.getMAXZ();i++){
             SHAPE shape=SHAPE.AllShapes[i];
             if(shape.isEXIST()&&shape.findFather()==null){
                 list(shape,"");

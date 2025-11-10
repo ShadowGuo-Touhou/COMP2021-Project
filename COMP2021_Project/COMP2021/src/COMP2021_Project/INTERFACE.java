@@ -5,12 +5,11 @@ import java.util.Scanner;
  * The interface of the whole project
  */
 public class INTERFACE {
-    private static Scanner scanner = new Scanner(System.in);
-    private static GUIInterface gui = new GUIInterface();
+    private final static Scanner scanner = new Scanner(System.in);
+    private final static GUIInterface gui = new GUIInterface();
 
     /**
-     * 获取GUI
-     * @return
+     * @return gui
      */
     public static GUIInterface getGui(){return gui;}
 
@@ -29,9 +28,18 @@ public class INTERFACE {
         }
     }
 
+    /**
+     * @param args file path args
+     * @return if the path is effective
+     */
     public static boolean filePathTest(String[] args){
         return LOGS.IshtmlPathEffective(args)&&LOGS.IstxtPathEffective(args);
     }
+
+    /**
+     * @param sc the input
+     * @return quit or not
+     */
     public static boolean commandProcess(String sc){
         gui.updateOutput(sc);
         String[] inputs = sc.trim().split(" ");

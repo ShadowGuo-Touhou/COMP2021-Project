@@ -17,7 +17,7 @@ public class IS_EFFECTIVE {
         this.inputs=inputs;
         this.command=command;
     }
-    /**判断形状是否重复*/
+    /** Determine whether the shapes are repetitive */
     private boolean IsDuplicate(){
         if(OPERATION.MAP.containsKey(inputs[1])){
             String out = String.format("Error! Duplicate Shape: " + inputs[1]);
@@ -27,7 +27,7 @@ public class IS_EFFECTIVE {
         }
         return false;
     }
-    /**确认参数个数是否正确*/
+    /** Confirm whether the number of parameters is correct */
     private boolean IsWrongNumberOfParameters(){
         int n=inputs.length;
         switch (command){
@@ -80,7 +80,7 @@ public class IS_EFFECTIVE {
                 return false;
         }
     }
-    /**判断形状和组是否存在*/
+    /** Determine whether shapes and groups exist */
     private boolean IsShapeExist(String name){
         if(!(OPERATION.MAP.containsKey(name))){
             String out = String.format("Error! Can't find shape: " + name);
@@ -110,7 +110,7 @@ public class IS_EFFECTIVE {
                     return false;
                 }
                 double[] arg=new double[n-2];
-                /**检查参数是否可以进行double类型转换*/
+                // Check whether the parameters can be converted to double type
                 for(int i=0;i<arg.length;i++){
                     try {
                         arg[i] = Double.parseDouble(inputs[2+i]);

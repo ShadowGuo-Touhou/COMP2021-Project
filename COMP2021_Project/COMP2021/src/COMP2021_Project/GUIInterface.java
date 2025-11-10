@@ -48,7 +48,7 @@ public class GUIInterface {
     }
 
     /**
-     * Close
+     * Close the GUI
      */
     public void close(){
         mainDisplayFrame.dispose();
@@ -213,19 +213,19 @@ public class GUIInterface {
 //    }
     
     /**@return
-     * 这个方法可以获取用户输入，返回String
+     * This method can obtain user input and return a String
      */
     public String getUserInput(){return this.userInputString;}
     /**
-     * 写入输出栏
-     * @param s 输出
+     * Write to the output column
+     * @param s output
      */
     public void updateOutput(String s){
         SwingUtilities.invokeLater(()->outputTextArea.append(s+"\n"));
     }
 //===================================Draw shape=====================================================\\
     /**
-     * 这个方法是用来绘制图形的，建议直接传入包含所有图形的数组，无需去掉Group类
+     * This method is used to draw shapes
      * @param shape s
      */
     public void DrawShape(SHAPE[] shape){
@@ -345,7 +345,7 @@ class Canvass extends JPanel {
     // 　 .| |ヽ.L.」　　　 ヽ _ﾝ　　　,'._.」　　　　V i '"　 ,＿__,　　 "' '!　ヽ　 （
     // 　 ヽ |ｲ|| |ヽ､　　　　　　　 ｲ|| |　　　　 i,.人.　　ヽ _ｿ　　　 ,.ﾊ　 ）　､ `､
     // 　 　ﾚ　ﾚル.　｀.ー--一 ´ル レ　　　　ﾉハ　> ,､ ._____,. ,,. ｲ;（　 （ '` .)　）
-    //  写烦了，整点行为艺术，这BGUI谁爱写谁写
+
 
     /*
      * invoke repainting the canvass
