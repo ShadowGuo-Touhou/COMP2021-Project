@@ -38,10 +38,6 @@ public abstract class OPERATION {
      * 重做被 undo 的操作
      */
     static void REDO() {
-        if (undoOperation.empty()) {
-            System.out.println("No undo operation yet!");
-            return;
-        }
         OPERATION it = undoOperation.pop();
         it.redo();
         pastOperation.push(it);
@@ -51,10 +47,6 @@ public abstract class OPERATION {
      * 撤销操作
      */
     static void UNDO() {
-        if (pastOperation.empty()) {
-            System.out.println("No operation yet!");
-            return;
-        }
         OPERATION it = pastOperation.pop();
         it.undo();
         undoOperation.push(it);
@@ -77,7 +69,7 @@ public abstract class OPERATION {
  * 创建非组图形的操作
  */
 class CREATE extends OPERATION {
-    private int originalZ = -1, Z;
+    private int Z;
 
     /**
      * @param type 需要创造的图形的类型：rectangle、circle、line、square
@@ -96,25 +88,14 @@ class CREATE extends OPERATION {
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
         SHAPE it=SHAPE.AllShapes[Z];
-        /**@lqc: 这里进行了修改，默认不可覆写形状*/
         MAP.put(name,it);
-        if(MAP.containsKey(name)){
-            originalZ=MAP.get(name).Z();
-            MAP.replace(name,it);
-        }else{
-            MAP.put(name,it);
-        }
         pastOperation.push(this);
     }
 
     @Override
     protected void redo() {
         SHAPE shape = SHAPE.AllShapes[Z];
-        if(originalZ==-1){
-            MAP.put(NAME,shape);
-        }else{
-            MAP.replace(NAME,shape);
-        }
+        MAP.put(NAME,shape);
         shape.setEXIST(true);
     }
 
@@ -122,11 +103,7 @@ class CREATE extends OPERATION {
     protected void undo() {
         SHAPE shape = MAP.get(NAME);
         shape.setEXIST(false);
-        if (originalZ != -1){
-            MAP.replace(NAME, SHAPE.AllShapes[originalZ]);
-        } else {
-            MAP.remove(NAME);
-        }
+        MAP.remove(NAME);
     }
 }
 
@@ -134,7 +111,7 @@ class CREATE extends OPERATION {
  * 创建组的操作
  */
 class _GROUP extends OPERATION {
-    private int originalZ = -1, Z;
+    private int Z;
 
     /**
      * @param name    图形的名字
@@ -146,14 +123,6 @@ class _GROUP extends OPERATION {
         Z=++SHAPE.MAXZ;
         SHAPE.AllShapes[Z]= new Group(name,Z);
         Group it=(Group) SHAPE.AllShapes[Z];
-
-         if(MAP.containsKey(name)){
-         originalZ=MAP.get(name).Z();
-         MAP.replace(name,it);
-         }else{
-         MAP.put(name,it);
-         }
-
         MAP.put(name,it);
         for (String member : members) {
             SHAPE shape = MAP.get(member);
@@ -170,12 +139,7 @@ class _GROUP extends OPERATION {
         for (SHAPE member : group.getMembers()) {
             member.setFather(group);
         }
-        if (originalZ == -1) {
-            MAP.put(NAME, group);
-        }else{
-            MAP.replace(NAME,group);
-        }
-
+        MAP.put(NAME, group);
     }
 
     @Override
@@ -186,11 +150,7 @@ class _GROUP extends OPERATION {
         for (SHAPE member : group.getMembers()) {
             member.setFather(null);
         }
-        if (originalZ != -1) {
-            MAP.replace(NAME, SHAPE.AllShapes[originalZ]);
-        } else {
-            MAP.remove(NAME);
-        }
+        MAP.remove(NAME);
     }
 }
 

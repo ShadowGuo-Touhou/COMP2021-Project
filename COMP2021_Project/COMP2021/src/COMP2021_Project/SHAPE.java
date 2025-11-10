@@ -206,9 +206,6 @@ class Line extends SHAPE{
     }
     @Override
     public boolean at(double x,double y){
-        if(X1()==X2()&&Y1()==Y2()){
-            return dis(X1(),Y1(),x,y)<=bias;
-        }
         double[] lineVector= new double[]{X2() - X1(), Y2() - Y1()};
         double[] pointVector=new double[]{x-X1(),y-Y1()};
         double len=dis(X1(),Y1(),X2(),Y2());

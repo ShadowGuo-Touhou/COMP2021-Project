@@ -87,11 +87,6 @@ public class IS_EFFECTIVE {
             System.out.println(out);
             gui.updateOutput(out);
             return false;
-        }else if(!OPERATION.MAP.get(name).isEXIST()){
-            String out = String.format("Error! Can't find shape: " + name);
-            System.out.println(out);
-            gui.updateOutput(out);
-            return false;
         }
         return true;
     }
@@ -174,15 +169,6 @@ public class IS_EFFECTIVE {
                 for(int i=0;i<n-2;i++){
                     if(!(IsShapeExist(inputs[2+i]))){
                         return false;
-                    }
-                }
-                for(int i=0;i<n-2;i++){
-                    for(int j=i+1;j<n-2;j++){
-                        if(inputs[2+i].equals(inputs[2+j])){
-                            System.out.println("Error! The shapes to be grouped coincide!");
-                            gui.updateOutput("Error! The shapes to be grouped coincide!");
-                            return false;
-                        }
                     }
                 }
                 return true;

@@ -45,7 +45,13 @@ public class GUIInterface {
      */
     public GUIInterface(){
         SwingUtilities.invokeLater(this::CreateMainDisplayFrame);
+    }
 
+    /**
+     * Close
+     */
+    public void close(){
+        mainDisplayFrame.dispose();
     }
     /*
      * Initialize the main dispaly GUI, this is where the main panel is created and components of which are added. 

@@ -12,112 +12,7 @@ import java.awt.event.KeyEvent;
  */
 public class INTERFACETest {
     @Test
-    public void testCoverage(){
-        INTERFACE.filePathTest(new String[]{"-txt",System.getProperty("user.dir"),"-html",System.getProperty("user.dir")});
-        GUIInterface gui=INTERFACE.getGui();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        INTERFACE.commandProcess("rectangle rect1 10 10 50 30");
-        INTERFACE.commandProcess("rectangle rect2 20 20 50");
-        INTERFACE.commandProcess("rectangle rect2 20 20 50 -10");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("line line1 5 5 45 25");
-        INTERFACE.commandProcess("circle circle1 30 30 15");
-        INTERFACE.commandProcess("square square1 60 60 25");
-        INTERFACE.commandProcess("rectangle rect2 80 20 40 40");
-        INTERFACE.commandProcess("list rect1");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("listAll");
-        INTERFACE.commandProcess("boundingbox rect1");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("shapeAt 15 15");
-        INTERFACE.commandProcess("intersect rect1 circle1");
-        INTERFACE.commandProcess("move rect1 5 -5");
-        INTERFACE.commandProcess("delete rect1");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("delete rect2");
-        INTERFACE.commandProcess("delete rect1 rect2");
-        INTERFACE.commandProcess("move rect1 5 -5 2");
-        INTERFACE.commandProcess("resultdo");
-        INTERFACE.commandProcess("move circle1 -10 10");
-        INTERFACE.commandProcess("group group1 rect1 circle1 line1 square1");
-        INTERFACE.commandProcess("delete group1");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("move rect1 1 1");
-        INTERFACE.commandProcess("list group1");
-        INTERFACE.commandProcess("move group1 20 -20");
-        INTERFACE.commandProcess("boundingbox group1");
-        INTERFACE.commandProcess("intersect group1 rect2");
-        INTERFACE.commandProcess("ungroup group1");
-        INTERFACE.commandProcess("move rect1 -5 5");
-        INTERFACE.commandProcess("list rect1");
-        INTERFACE.commandProcess("rectangle rect1 0 0 10 10");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("move nonexistent 10 10");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("list ghost");
-        INTERFACE.commandProcess("delete phantom");
-        INTERFACE.commandProcess("rectangle");
-        INTERFACE.commandProcess("rectangle rect3 x y 10 10");
-        INTERFACE.commandProcess("circle circle2 0 0 -5");
-        INTERFACE.commandProcess("square square2 0 0 -10");
-        INTERFACE.commandProcess("group empty_group");
-        INTERFACE.commandProcess("group group2 rect1 nonexistent");
-        INTERFACE.commandProcess("ungroup nonexistent_group");
-        INTERFACE.commandProcess("ungroup rect1");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("rectangle innerRect1 100 100 20 20");
-        INTERFACE.commandProcess("circle innerCircle1 120 120 10");
-        INTERFACE.commandProcess("group innerGroup innerRect1 innerCircle1");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("rectangle outerRect 90 90 50 50");
-        INTERFACE.commandProcess("group complexGroup innerGroup outerRect");
-        INTERFACE.commandProcess("list complexGroup");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("listAll");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("ungroup innerGroup");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("list complexGroup");
-        INTERFACE.commandProcess("listAll");
-        INTERFACE.commandProcess("move innerRect1 5 5");
-        INTERFACE.commandProcess("group groupA rect1");
-        INTERFACE.commandProcess("group groupB groupA");
-        INTERFACE.commandProcess("rectangle autoRect1 0 0 25 20");
-        INTERFACE.commandProcess("circle autoCircle2 50 50 8");
-        INTERFACE.commandProcess("rectangle autoRect3 30 25 25 20");
-        INTERFACE.commandProcess("circle autoCircle4 85 80 10");
-        INTERFACE.commandProcess("rectangle autoRect5 60 50 25 20");
-        INTERFACE.commandProcess("circle autoCircle6 120 110 12");
-        INTERFACE.commandProcess("rectangle autoRect7 90 75 25 20");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("circle autoCircle8 155 140 14");
-        INTERFACE.commandProcess("group batchGroup1 autoRect1 autoCircle1 autoRect2");
-        INTERFACE.commandProcess("redo");
-        INTERFACE.commandProcess("group batchGroup2 autoCircle2 autoCircle3");
-        INTERFACE.commandProcess("boundingbox nestedGroup");
-        INTERFACE.commandProcess("shapeAt 60 60");
-        INTERFACE.commandProcess("move nestedGroup -20 15");
-        INTERFACE.commandProcess("undo");
-        INTERFACE.commandProcess("move batchGroup2 10 -10");
-        INTERFACE.commandProcess("ungroup nestedGroup");
-        INTERFACE.commandProcess("quit");
-    }
-
-    @Test
-    public void testGui() throws AWTException {
+    public void testCoverage() throws AWTException {
         INTERFACE.filePathTest(new String[]{"-txt",System.getProperty("user.dir"),"-html",System.getProperty("user.dir")});
         GUIInterface gui=INTERFACE.getGui();
         Robot robot = new Robot();
@@ -144,5 +39,100 @@ public class INTERFACETest {
         robot.keyRelease(KeyEvent.VK_EQUALS);
         robot.keyRelease(KeyEvent.VK_MINUS);
 
+        //Basic Operations
+        INTERFACE.commandProcess("rectangle rect1 10 10 50 30");
+        INTERFACE.commandProcess("line line1 5 5 45 25");
+        INTERFACE.commandProcess("circle circle1 30 30 15");
+        INTERFACE.commandProcess("square square1 60 60 25");
+        INTERFACE.commandProcess("rectangle rect2 80 20 40 40");
+        INTERFACE.commandProcess("group Group1 rect1 line1");
+        INTERFACE.commandProcess("delete circle1");
+        INTERFACE.commandProcess("move Group1 10 20");
+        INTERFACE.commandProcess("group Group2 Group1 rect2 square1");
+        INTERFACE.commandProcess("ungroup Group2");
+
+        //Information Queries
+        INTERFACE.commandProcess("boundingbox rect2");
+        INTERFACE.commandProcess("list square1");
+        INTERFACE.commandProcess("shapeAt 80.0001 20");
+        INTERFACE.commandProcess("shapeAt 14.997 24.997");
+        INTERFACE.commandProcess("shapeAt 20 20");
+        INTERFACE.commandProcess("intersect Group1 square1");
+        INTERFACE.commandProcess("listall");
+
+        //Complex Group Operations&Queries
+        INTERFACE.commandProcess("group Group3 rect1 rect2");
+        INTERFACE.commandProcess("list Group3");
+        INTERFACE.commandProcess("move Group3 200 10");
+        INTERFACE.commandProcess("ungroup Group1");
+        INTERFACE.commandProcess("list Group3");
+        INTERFACE.commandProcess("boundingbox Group3");
+        INTERFACE.commandProcess("delete Group3");
+
+        //Undo & Redo
+        INTERFACE.commandProcess("rectangle rect3 20 30 50 60");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("circle circle2 66 66 88");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("square square2 79 26 8");
+        INTERFACE.commandProcess("group group4 rect3 circle2");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("move group4 -100 111");
+        INTERFACE.commandProcess("line line1 29 30 29 60");
+        INTERFACE.commandProcess("group Group1 rect3 square2 line1");
+        INTERFACE.commandProcess("ungroup group4");
+        INTERFACE.commandProcess("shapeAt 66 154");
+        INTERFACE.commandProcess("listall");
+        INTERFACE.commandProcess("intersect square1 Group1");
+        INTERFACE.commandProcess("delete Group1");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("intersect Group1 square1");
+        INTERFACE.commandProcess("move Group1 228 779");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("redo");
+
+        //Wrong Handle
+        INTERFACE.commandProcess("group Group1 Group1 Group1 Group1");
+        INTERFACE.commandProcess("group Group2 exist? no");
+        INTERFACE.commandProcess("move ghost 999 666");
+        INTERFACE.commandProcess("circle errorcircle -1 -1 -11");
+        INTERFACE.commandProcess("rectangle rect7 100 100 100 100 100 100");
+        INTERFACE.commandProcess("intersect Group1 nonexist");
+        INTERFACE.commandProcess("square square5 7u 7 7");
+        INTERFACE.commandProcess("What is this operation?");
+        INTERFACE.commandProcess("delete square1");
+        INTERFACE.commandProcess("move square1 1 1");
+        INTERFACE.commandProcess("undo then redo");
+        INTERFACE.commandProcess("redo");
+        INTERFACE.commandProcess("undo");
+        INTERFACE.commandProcess("square square1 23 2 4");
+        INTERFACE.commandProcess("ungroup square1");
+        INTERFACE.commandProcess("move line1 87 67");
+        INTERFACE.commandProcess("intersect Group1 line1");
+        INTERFACE.commandProcess("intersect line1 Group1");
+        INTERFACE.commandProcess("delete line1");
+        INTERFACE.commandProcess("move square1 9u 8u");
+        INTERFACE.commandProcess("move square1 -9 eight");
+        INTERFACE.commandProcess("square square4 -2 -3 -4");
+        INTERFACE.commandProcess("square square4 -2 -3 4u");
+        INTERFACE.commandProcess("rectangle rect6 7 5 3 -2");
+        INTERFACE.commandProcess("line line3 8 8 8 8");
+        //quit
+        INTERFACE.commandProcess("quit");
     }
+
 }

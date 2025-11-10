@@ -25,14 +25,14 @@ public class INTERFACE {
         }
         while(true){
             String sc = scanner.nextLine();
-            commandProcess(sc);
+            if(!commandProcess(sc))break;
         }
     }
 
     public static boolean filePathTest(String[] args){
         return LOGS.IshtmlPathEffective(args)&&LOGS.IstxtPathEffective(args);
     }
-    public static void commandProcess(String sc){
+    public static boolean commandProcess(String sc){
         gui.updateOutput(sc);
         String[] inputs = sc.trim().split(" ");
         int n=inputs.length;
@@ -41,7 +41,7 @@ public class INTERFACE {
         if(!sign.IsEffective()){
             System.out.println("Please try again!");
             gui.updateOutput("Please try again!");
-            return;
+            return true;
         }
         new LOGS(inputs);
         double x,y;
@@ -101,11 +101,17 @@ public class INTERFACE {
             case "quit":
                 System.out.println("Goodbye!");
                 gui.updateOutput("Goodbye!");
-                /**@lqc: 在这里关闭并保存日志*/
                 LOGS.CloseFile();
-                System.exit(0);
+                gui.close();
+                return false;
+//                System.exit(0);
         }
         gui.DrawShape(SHAPE.AllShapes);
-
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 }
