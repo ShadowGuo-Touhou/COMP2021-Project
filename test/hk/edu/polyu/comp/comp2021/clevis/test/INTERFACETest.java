@@ -1,4 +1,6 @@
-package COMP2021_Project;
+package hk.edu.polyu.comp.comp2021.clevis.test;
+import hk.edu.polyu.comp.comp2021.clevis.model.*;
+
 import org.junit.Test;
 
 import java.awt.AWTException;
