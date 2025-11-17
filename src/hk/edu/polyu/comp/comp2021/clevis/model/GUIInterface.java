@@ -91,14 +91,14 @@ public class GUIInterface {
         mainDisplayFrame.add(outputTextAreaScrollPane, layoutManager);
         outputTextArea.append("Use CTRL+arrow keys to adjust position\nUse CTRL+ PLUS/MINUS to zoom in/out\n(´▽`ʃ♡ƪ)\n");
 
-        layoutManager.gridheight = 1;
-        layoutManager.fill = GridBagConstraints.HORIZONTAL;
-        layoutManager.gridx = 0;layoutManager.gridy = 2;
-        inputTextArea.setBackground(Color.black);
-        inputTextArea.setForeground(Color.WHITE);
-        inputTextArea.setLineWrap(true);
-        JScrollPane inputTextAreaScrollPane = new JScrollPane(inputTextArea);
-        inputTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+//        layoutManager.gridheight = 1;
+//        layoutManager.fill = GridBagConstraints.HORIZONTAL;
+//        layoutManager.gridx = 0;layoutManager.gridy = 2;
+//        inputTextArea.setBackground(Color.black);
+//        inputTextArea.setForeground(Color.WHITE);
+//        inputTextArea.setLineWrap(true);
+//        JScrollPane inputTextAreaScrollPane = new JScrollPane(inputTextArea);
+//        inputTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 //        mainDisplayFrame.add(inputTextAreaScrollPane, layoutManager);
         //=============================================================================================\\
         //Buttons
@@ -135,12 +135,12 @@ public class GUIInterface {
             public void actionPerformed(ActionEvent e){
                 myCanvass.shiftLeft();
             }});
-       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
-       inputTextArea.getActionMap().put(MOVELEFT, new AbstractAction() {
-           @Override
-           public void actionPerformed(ActionEvent e){
-               myCanvass.shiftLeft();
-           }});
+//       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK), MOVELEFT);
+//       inputTextArea.getActionMap().put(MOVELEFT, new AbstractAction() {
+//           @Override
+//           public void actionPerformed(ActionEvent e){
+//               myCanvass.shiftLeft();
+//           }});
     //RIGHT Key Binding==============================================================
         final String MOVERIGHT = "MoveRIGHT";
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
@@ -149,12 +149,12 @@ public class GUIInterface {
             public void actionPerformed(ActionEvent e){
                 myCanvass.shiftRight();
             }});
-       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
-       inputTextArea.getActionMap().put(MOVERIGHT, new AbstractAction() {
-           @Override
-           public void actionPerformed(ActionEvent e){
-               myCanvass.shiftRight();
-           }});
+//       inputTextArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), MOVERIGHT);
+//       inputTextArea.getActionMap().put(MOVERIGHT, new AbstractAction() {
+//           @Override
+//           public void actionPerformed(ActionEvent e){
+//               myCanvass.shiftRight();
+//           }});
     //UP Key Binding================================================================
         final String MOVEUP = "MoveUp";
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP,KeyEvent.CTRL_DOWN_MASK), MOVEUP);
