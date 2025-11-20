@@ -1,3 +1,0 @@
-现在的问题是GUI和mainloop的交互不是很方便，所以redo和undo我觉得还是由用户输入处理比较方便。
-出于这个原因，我把其他按钮也移除了，你们想要的话uncomment掉就行了
-你们记得把cirno.png和GUIInterface放在一个文件夹下，没了她程序跑不动

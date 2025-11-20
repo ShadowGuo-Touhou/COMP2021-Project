@@ -316,7 +316,7 @@ class Canvass extends JPanel {
                         shape.drawLine(fit1[0], fit1[1], fit2[0], fit2[1]);
                     }
                     case Circle s -> {
-                        int[] fit = fitToWindow((int) Math.round(s.X()), (int) Math.round(s.Y()));
+                        int[] fit = fitToWindow((int) Math.round(s.X()-s.R()), (int) Math.round(s.Y()+s.R()));
                         shape.drawOval(fit[0], fit[1], zoomRate * (int) Math.round(s.R()) * 2, zoomRate * (int) Math.round(s.R()) * 2);
                     }
                     case Square s -> {
